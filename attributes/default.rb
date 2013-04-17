@@ -21,11 +21,11 @@ default['fcgiwrap']['group'] = 'www-data'
 case node['platform_family']
 when 'debian'
   default['fcgiwrap']['pkgs'] = ['fcgiwrap']
-  default['fcgiwrap']['fcgi_socket'] = '/var/run/fcgiwrap.socket'
+  default['fcgiwrap']['socket'] = '/var/run/fcgiwrap.socket'
 when 'rhel','fedora'
   default['fcgiwrap']['pkgs'] = ['fcgi-devel']
-  default['fcgiwrap']['fcgi_socket'] = '/var/run/fcgiwrap.socket'
+  default['fcgiwrap']['socket'] = '/var/run/fcgiwrap.socket'
 else
   default['fcgiwrap']['pkgs'] = ['fcgi-devel']
-  default['fcgiwrap']['fcgi_socket'] = '/var/run/fcgiwrap.socket'
+  default['fcgiwrap']['socket'] = '/var/run/fcgiwrap.socket'
 end
