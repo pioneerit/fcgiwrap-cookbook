@@ -6,37 +6,20 @@ fcgiwrap is a simple server for running CGI applications over FastCGI. It hopes 
 
 Requirements
 ------------
-For RHEL needs packages:
-- autoconf
-- make
-
-TODO: depend on `build-essential`
+- `build-essential` cookbook
 
 
-e.g.
-#### packages
-- `toaster` - fcgiwrap needs toaster to brown your bagel.
+Changelog
+------------
+- Ubuntu support. More flexible with attributes. Used at nagios [srodrig0209](https://github.com/srodrig0209/fcgiwrap-cookbook)
+
 
 Attributes
 ----------
-TODO: Add to cookbook attributes for configure
-
-e.g.
-#### fcgiwrap::default
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['fcgiwrap']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
-  </tr>
-</table>
+- `node['fcgiwrap']['user']`  = 'www-data' - user for fcgiwrap script
+- `node['fcgiwrap']['group']` = 'www-data' - group for fcgiwrap script
+- `node['fcgiwrap']['socket']` = '/var/run/fcgiwrap.socket' - path to fcgiwrap socket
+- `node['fcgiwrap']['pkgs']` - requirements packages based on OS.
 
 Usage
 -----

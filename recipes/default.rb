@@ -15,43 +15,36 @@
 # limitations under the License.
 #
 
-pkgs = value_for_platform(
-  %w(centos redhat scientific fedora amazon oracle) => {
-    'default' => %w(fcgi-devel)
-  },
-  [ "debian", "ubuntu" ] => {
-    "default" => %w(fcgiwrap)
-  },
-  "default" => %w(fcgi-devel)
-)
-
-pkgs.each do |pkg|
+node['fcgiwrap']['pkgs'].each do |pkg|
   package pkg do
     action :install
   end
 end
 
-remote_file "/usr/local/src/fcgiwrap.tar.gz" do
-  owner "root"
-  group "root"
-  mode 00644
-  source "http://github.com/gnosek/fcgiwrap/tarball/master"
-end
+unless platform?("debian", "ubuntu")
+  remote_file "/usr/local/src/fcgiwrap.tar.gz" do
+    owner "root"
+    group "root"
+    mode 00644
+    source "http://github.com/gnosek/fcgiwrap/tarball/master"
+  end
 
-bash "install fcgiwrap" do
-	user "root"
-	cwd "/usr/local/src"
-	code <<-EOH
-	rm -rf fcgiwrap
-	mkdir fcgiwrap
-	tar -C ./fcgiwrap -xf fcgiwrap.tar.gz
-	mv fcgiwrap/*/* fcgiwrap/
-	cd fcgiwrap
-	autoreconf -i
-	./configure
-	make install
-	spawn-fcgi -u nginx -g nginx -M 0775 -s /var/run/nginx/cgiwrap-dispatch.sock -U nginx -G nginx /usr/local/sbin/fcgiwrap
-	EOH
+  bash "install fcgiwrap" do
+  	user "root"
+  	cwd "/usr/local/src"
+  	code <<-EOH
+  	rm -rf fcgiwrap
+  	mkdir fcgiwrap
+  	tar -C ./fcgiwrap -xf fcgiwrap.tar.gz
+  	mv fcgiwrap/*/* fcgiwrap/
+  	cd fcgiwrap
+  	autoreconf -i
+  	./configure
+  	make install
+  	spawn-fcgi -u #{node['fcgiwrap']['user']} -g #{node['fcgiwrap']['group']} -M 0775 -s /var/run/nginx/cgiwrap-dispatch.sock -U #{node['fcgiwrap']['user']} -G #{node['fcgiwrap']['group']} /usr/local/sbin/fcgiwrap
+  	EOH
+  end
+  not_if 'pgrep fcgiwrap'
 end
 
 # template "/etc/init.d/fcgiwrap" do
@@ -59,6 +52,4 @@ end
 # 	owner "root"
 # 	group "root"
 # 	mode 00644
-# 	# variables( :config_var => node[:configs][:config_var] )
 # end
-

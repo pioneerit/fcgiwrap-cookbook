@@ -28,9 +28,9 @@ test -x $DAEMON || exit 0
 
 # FCGI_APP Variables
 FCGI_CHILDREN="1"
-FCGI_SOCKET="/var/run/$NAME.socket"
-FCGI_USER="www-data"
-FCGI_GROUP="www-data"
+FCGI_SOCKET="<%= @node[:fcgiwrap][:socket] %>"
+FCGI_USER="<%= @node[:fcgiwrap][:user] %>"
+FCGI_GROUP="<%= @node[:fcgiwrap][:group] %>"
 
 . /lib/lsb/init-functions
 
