@@ -41,15 +41,15 @@ unless platform?("debian", "ubuntu")
   	autoreconf -i
   	./configure
   	make install
-  	spawn-fcgi -u nginx -g nginx -M 0775 -s /var/run/nginx/cgiwrap-dispatch.sock -U nginx -G nginx /usr/local/sbin/fcgiwrap
+  	spawn-fcgi -u #{node['fcgiwrap']['user']} -g #{node['fcgiwrap']['group']} -M 0775 -s /var/run/nginx/cgiwrap-dispatch.sock -U #{node['fcgiwrap']['user']} -G #{node['fcgiwrap']['group']} /usr/local/sbin/fcgiwrap
   	EOH
   end
+  not_if 'pgrep fcgiwrap'
 end
+
 # template "/etc/init.d/fcgiwrap" do
 # 	source "fcgiwrap.erb"
 # 	owner "root"
 # 	group "root"
 # 	mode 00644
-# 	# variables( :config_var => node[:configs][:config_var] )
 # end
-
